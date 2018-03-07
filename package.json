@@ -1,0 +1,28 @@
+{
+  "name": "authpush",
+  "version": "1.0.1",
+  "description": "The official API for Authpush.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node ./bin/www"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/authbaseco/authpush-api.git"
+  },
+  "keywords": [
+    "authbase",
+    "authpush"
+  ],
+  "author": "William Gibson <w.gibbo3@icloud.com> (https://authbase.co/)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/authbaseco/authpush-api/issues"
+  },
+  "homepage": "https://github.com/authbaseco/authpush-api#readme",
+  "dependencies": {
+    "is-json": "^2.0.1",
+    "md5": "^2.2.1",
+    "request": "^2.83.0"
+  }
+}
