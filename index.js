@@ -27,7 +27,7 @@ var AuthpushAPIBE = {
         if(AuthpushAPIBE.checkTokenStatus()){
             if(message && userID && UUID){
                 request.post({
-                    url: "http://localhost:3000/api/v1/ap-sendNotification",
+                    url: "https://authbase.co/api/v1/ap-sendNotification",
                     form: {
                         msg: message,
                         userID: userID,
@@ -101,7 +101,7 @@ exports.authenticate = function(payload, callback) {
     if(appID && appSecret) {
         if(appID.length == 10 && appSecret.length == 10){
             request.post({
-                url: "http://localhost:3000/api/v1/ap-authenticateApp",
+                url: "https://authbase.co/api/v1/ap-authenticateApp",
                 form: {
                     appID: appID,
                     appSecret: appSecret
@@ -169,7 +169,7 @@ exports.get = {
         if(AuthpushAPIBE.checkTokenStatus()){
             if(userID){
                 request.post({
-                    url: "http://localhost:3000/api/v1/ap-getUUID",
+                    url: "https://authbase.co/api/v1/ap-getUUID",
                     form: {
                         appID: apTokens.appID,
                         appSecret: apTokens.appSecret,
