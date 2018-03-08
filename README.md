@@ -1,3 +1,4 @@
+﻿
 # Authpush API
 Hey there! You're probably here to make your apps better with Authpush, a new, simplified and secure notification service from Authbase. We're here just to tell you how it works. It's simple - don't worry!
 
@@ -9,9 +10,11 @@ To use the Authpush API, you need your App ID and your App Secret. These can be 
 *Important: you should never show your App Secret to anyone. Doing so will mean they can send notifications pretending to be your app. Never use the Authpush API on the client side of your site.*
 
 ## Installing the API
-It is required that Authpush is ran on the server-side and not on the client-side for security reasons.
+It is required that the Authpush API is ran on the server-side and not on the client-side for security reasons.
 
-Node.JS: `npm install authpush`
+You can install the Authpush API from npm by running:
+
+`npm install authpush`
 
 ## Using the API
 ### Setting Up
@@ -29,7 +32,7 @@ To set the App ID and App Secret, just use:
 			console.log("An error occured.");
 		}
 	});
-Authpush will remember these credentials whilst running.
+The Authpush API will remember these credentials whilst running.
 #### Response
 
  - response: See [Response Types](#response-types).
@@ -81,8 +84,9 @@ Sending a notification requires the User ID, and the UUID. It also requires you 
         }
     });
 This will send the message "Hello World!" to the users phone. It will display as:
-` [AppName]: Hello World! `.
 
+![Example Authpush Notification](https://i.imgur.com/U9smGTF.jpg)
+The notification features the title of the app in bold (in the case of the screenshot, it is 'Rapid') and the body of the notification below.
 #### Response
 
  - response: See [Response Types](#response-types).
@@ -128,7 +132,10 @@ We are always looking to improve the API to accommidate for developers needs. Th
 
  - Specific UUID Selecting
  - Rich Push Notifications
+	 - Images
+	 - URL Linking
  - Profiles
+	 - Different Authpush apps for different areas of your code.
 
 ## Support
 Have any issues using the API? Feel free to email us at [support@authbase.co](mailto:support@authbase.co).

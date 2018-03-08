@@ -1,6 +1,6 @@
 {
   "name": "authpush",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "The official API for Authpush.",
   "main": "index.js",
   "scripts": {
