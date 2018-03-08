@@ -24,7 +24,7 @@ To set the App ID and App Secret, just use:
 		if(res.response == "OK"){
 			console.log("Successfully authenticated!");
 		} else if(res.response == "N/A-AUTH") {
-			console.log("The appID or appSecrt is incorrect.");
+			console.log("The appID or appSecret is incorrect.");
 		} else {
 			console.log("An error occured.");
 		}
@@ -42,7 +42,7 @@ To send a push notification to a specific user, you will need their User ID and 
 *Optional: You can use the [md5 npm package](https://www.npmjs.com/package/md5) to do this.*
 
 ### Retrieving the UUID
-You will also need their UUID. The users UUID can be found by doing:
+To send a notification to a user, you will need their UUID. This can be retrieved from their userID. It also requires you to [have been authenticated](#setting-up) with the Authpush API. The users UUID can be found by doing:
 
     Authpush.get.UUID(userID, function(res){
 		if(res.response == "OK"){
@@ -65,7 +65,7 @@ This will return a JSON Object:
 
 ### Sending a Notification
 ### Specific User
-Sending a notification requires the App ID, App Secret, User ID, and the UUID.
+Sending a notification requires the User ID, and the UUID. It also requires you to [have been authenticated](#setting-up) with the Authpush API.
 
     var payload = { 
 	    message: "Hello World!",
@@ -112,10 +112,14 @@ Every request will return a JSON object with a 'response' item. The response typ
 	- The request was successful
 - ERR
 	- An unknown error occured.
+- ERR{ INT }
+	- A connection error occured with the ID of { INT }
 - 404-USER
 	- The user was not found.
 - 404-APP
 	- The app was not found, or the authentication information was incorrect.
+- N/A
+	- Not found (General)
 - N/A-AUTH
 	- You have not yet authenticated with your App ID and App Secret. See [Setting Up](#setting-up).
     
