@@ -7,6 +7,8 @@ let apResponses = {
     GENERAL_ERROR: "ERR"
 };
 
+var urlBase = "http://localhost:5000"
+
 var apTokens = {
     appID: null,
     appSecret: null
@@ -21,19 +23,33 @@ var AuthpushAPIBE = {
         }
     },
     sendNotification: function(payload, callback) {
-        var message = payload.message,
-        userID = payload.userID,
-        UUID = payload.UUID;
+        var toData = {};
+        var shouldProceed = true;
+
+        if(payload.data.to == "ALL_USERS"){
+            toData = "ALL_USERS";
+        } else if(payload.data.to.userID != null && payload.data.to.UUID != null) {
+            toData = payload.data.to;
+        } else {
+            shouldProceed = false;
+        }
+
+        if(payload.data){
+            payload.data.from = {
+                appID: apTokens.appID,
+                appSecret: apTokens.appSecret
+            }
+        } else {
+            shouldProceed = false;
+        }
+
         if(AuthpushAPIBE.checkTokenStatus()){
-            if(message && userID && UUID){
+            if(payload.noti.msg){
                 request.post({
-                    url: "https://authbase.co/api/v1/ap-sendNotification",
+                    url: urlBase + "/api/v1/ap-sendNotification",
                     form: {
-                        msg: message,
-                        userID: userID,
-                        UUID: UUID,
-                        appID: apTokens.appID,
-                        appSecret: apTokens.appSecret
+                        authPayload: JSON.stringify(payload),
+                        dataType: "JSON"
                     }
                 }, function(err, httpResponse, body){
                     if(err){
@@ -96,7 +112,7 @@ var AuthpushAPIBE = {
         if(appID && appSecret) {
             if(appID.length == 10 && appSecret.length == 10){
                 request.post({
-                    url: "https://authbase.co/api/v1/ap-authenticateApp",
+                    url: urlBase + "/api/v1/ap-authenticateApp",
                     form: {
                         appID: appID,
                         appSecret: appSecret
@@ -163,7 +179,7 @@ var AuthpushAPIBE = {
             if(AuthpushAPIBE.checkTokenStatus()){
                 if(userID){
                     request.post({
-                        url: "https://authbase.co/api/v1/ap-getUUID",
+                        url: urlBase + "/api/v1/ap-getUUID",
                         form: {
                             appID: apTokens.appID,
                             appSecret: apTokens.appSecret,

@@ -1,4 +1,4 @@
-﻿# Authpush API
+# Authpush API
 Hey there! You're probably here to make your apps better with Authpush, a new, simplified and secure notification service from Authbase. We're here just to tell you how it works. It's simple - don't worry!
 
 ## Register an App
@@ -37,7 +37,7 @@ If you're using the REST API, to verify the App ID and App Secret, send a reques
 
 * **Data Params**
 	
-	```json
+	```
 	{
 		appID: appID,
 		appSecret: appSecret
@@ -110,7 +110,7 @@ If you're using the REST API, to send a notification to a user, you will need th
 
 * **Data Params**
 	
-	```json
+	```
 	{
 		userID: userID,
 		appID: appID,
@@ -172,6 +172,7 @@ This will return a JSON Object:
 
 ### Sending a Notification
 ### Specific User
+Sending a notification to a specific user allows you to notify them of any event. As Authpush supports Android, you won't have to use different code for your iOS / Android users, Authpush handles it automatically.
 #### REST API
 If you're using the REST API, to send a notification to a specific users, you will need the [UUID](#retrieving-the-uuid), send a request to the following page:
 
@@ -185,13 +186,24 @@ If you're using the REST API, to send a notification to a specific users, you wi
 
 * **Data Params**
 	
-	```json
+	```
 	{
-		msg: "Hello World!",
-		userID: userID,
-		UUID: UUID,
-		appID: "yourAppID",
-		appSecret: "yourAppSecret"
+        authPayload: JSON.stringify({
+            noti: {
+                msg: "This is an example notification."
+            },
+            data: {
+                to: {
+                    userID: userID,
+                    UUID: UUID
+                },
+                from: {
+                    appID: "yourAppID",
+                    appSecret: "yourAppSecret"
+                }
+            }
+        }),
+        dataType: "JSON"
 	}
 	```
 	
@@ -204,11 +216,22 @@ If you're using the REST API, to send a notification to a specific users, you wi
 
 	```javascript
 	$.post(baseURL + "/ap-sendNotification",{
-		msg: "Hello World!",
-		userID: userID,
-		UUID: UUID,
-		appID: appID,
-		appSecret: appSecret
+        authPayload: JSON.stringify({
+            noti: {
+                msg: "This is an example notification."
+            },
+            data: {
+                to: {
+                    userID: userID,
+                    UUID: UUID
+                },
+                from: {
+                    appID: "yourAppID",
+                    appSecret: "yourAppSecret"
+                }
+            }
+        }),
+        dataType: "JSON"
 	}, function(res){
 	    if(res.response == "OK"){
 	        console.log("Notification sent!");
@@ -223,10 +246,17 @@ If you're using the REST API, to send a notification to a specific users, you wi
 Sending a notification requires the User ID, and the UUID. It also requires you to [have been authenticated](#setting-up) with the Authpush API.
 
 ```
-var payload = { 
-    message: "Hello World!",
-    userID: userID,
-    UUID: UUID
+var payload = {
+    noti: {
+        msg: "This is an example notification."
+        imgUrl
+    },
+    data: {
+        to: {
+            userID: userID,
+            UUID: UUID
+        }
+    }
 };
 
 Authpush.push.notification.specific(payload, function(res){
@@ -242,70 +272,45 @@ This will send the message "Hello World!" to the users phone. It will display as
 
 ![Example Authpush Notification](https://i.imgur.com/U9smGTF.jpg)
 The notification features the title of the app in bold (in the case of the screenshot, it is 'Rapid') and the body of the notification below.
+
+See [Optional Notification Options](#optional-notification-options) for more parameters to make your notifications stand out.
+
 #### Response
 
  - response: See [Response Types](#response-types).
 
 ### All Users
+Sending a notification to all users is simular to sending a notification to [sending a notification to a specific user](#specific-user). In your payload, under data, 'to' needs to be set to the string `ALL USERS`.
+
 #### REST API
-#### REST API
-If you're using the REST API, to send a notification to all users, send a request to the following page:
-
-* **URL**
-
-	/ap-sendNotification
-	
-* **Method:**
-
-	`POST`
-
-* **Data Params**
-	
-	```json
-	{
-		msg: "Hello World!",
-		userID: "ALL_USERS",
-		appID: "yourAppID",
-		appSecret: "yourAppSecret"
-	}
-	```
-	
-* **Response:**
-	* response: See [Response Types](#response-types).
-
-* **Sample Call:**
-
-	In this example, we will use the [jQuery](https://jquery.com) library for sending a POST request to the endpoint. 
-
-	```javascript
-	$.post(baseURL + "/ap-sendNotification",{
-		msg: "Hello World!",
-		userID: "ALL_USERS",
-		appID: "yourAppID",
-		appSecret: "yourAppSecret"
-	}, function(res){
-	    if(res.response == "OK"){
-	        console.log("Notification sent!");
-	    } else {
-	        console.log("An error occured whilst trying to send this notification.");
-	    }
-	});
-	```
+```
+var payload = {
+    noti: {
+        msg: "This is an example notification."
+    },
+    data: {
+        to: "ALL_USERS",
+        from: {
+            appID: "yourAppID",
+            appSecret: "appSecret"
+        }
+    }
+};
+```
 
 #### JS API
-You can also send a notification to all users enrolled with your app. Just use:
+```
+var payload = {
+    noti: {
+        msg: "This is an example notification."
+    },
+    data: {
+        to: "ALL_USERS"
+    }
+};
+```
 
-    var payload = { 
-        message: "Hello World!"
-    };
-
-    Authpush.push.notification.all(payload, function(res){
-        if(res.response == "OK"){
-            console.log("Notification sent to all users!");
-        } else {
-            console.log("An error occured whilst trying to send this notification.");
-        }
-    });
+See [Optional Notification Options](#optional-notification-options) for more parameters to make your notifications stand out.
 
 #### Response
 
@@ -328,7 +333,27 @@ Every request will return a JSON object with a 'response' item. The response typ
 	- Not found (General)
 - N/A-AUTH
 	- You have not yet authenticated with your App ID and App Secret. See [Setting Up](#setting-up).
-    
+
+### Optional Notification Options
+
+You can pass `imgUrl` under `noti` in the JSON object to allow users running Authpush for iOS 1.2 or above to view an image embed in the notification.
+
+You may also wish to pass `sound` under `noti` in the JSON object to allow users running Authpush for iOS 1.2 or above to hear a pre-defined Authpush notification sound. The possible values are:
+
+* default
+    * The default notification sound.
+* tone
+    * A long electronic synth sound.
+    * https://authbase.co/assets/sound/tone.wav
+* short
+    * A short blocky notification sound.
+    * https://authbase.co/assets/sound/short.wav
+* playful
+    * A medium rattly, but playful sound.
+    * https://authbase.co/assets/sound/playful.wav
+
+Both `sound` and `imgUrl` are optional.
+
 ## Upcoming Features
 
 We are always looking to improve the API to accommidate for developers needs. This is what we're working on:
